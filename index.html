@@ -75,40 +75,7 @@ a.btn{display:inline-block;text-decoration:none;font-family:Inter,Helvetica,Aria
 <textarea name="dietary" rows="2" placeholder="Allergies or anything we should know (optional)"></textarea>
 <p id="form-status" class="msg" role="status" aria-live="polite"></p>
 <div class="row" style="margin-top:22px"><button id="submit-button" type="submit">Send my choices</button></div>
-</form>
+</form><form id="menu-choices" action="https://formspree.io/f/mgakyrgo" method="POST">
 </main>
-
-<script>
-(function () {
-  const form = document.getElementById('menu-choices');
-  if (!form) return;
-  const status = document.getElementById('form-status');
-  const button = document.getElementById('submit-button');
-  form.addEventListener('submit', async function (event) {
-    event.preventDefault();
-    status.textContent = 'Sending your choices…';
-    if (button) { button.disabled = true; button.textContent = 'Sending…'; }
-    try {
-      const response = await fetch(form.action, {
-        method: 'POST',
-        body: new FormData(form),
-        headers: { 'Accept': 'application/json' }
-      });
-      if (response.ok) {
-        status.textContent = 'Thank you — your menu choices have been submitted.';
-        form.reset();
-      } else {
-        let message = 'Sorry, your choices could not be sent. Please try again.';
-        try { const data = await response.json(); if (data && data.errors) message = data.errors.map(e => e.message).join(' '); } catch (_) {}
-        status.textContent = message;
-      }
-    } catch (error) {
-      status.textContent = 'Connection problem. Please check your internet connection and try again.';
-    } finally {
-      if (button) { button.disabled = false; button.textContent = 'Send my choices'; }
-    }
-  });
-})();
-</script>
 </body>
 </html>
